@@ -6,7 +6,7 @@
 
 ### /etc/passwd的文件结构
 
-![image-20200923225554541](C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20200923225554541.png)
+![image-20200923225554541](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/image-20200923225554541.png)
 
 用   ：号隔开
 
@@ -20,7 +20,7 @@
 
 ### /etc/shadow的文件结构
 
-![image-20200923230452286](C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20200923230452286.png)
+![image-20200923230452286](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/image-20200923230452286.png)
 
 用  :  号隔开
 
@@ -61,7 +61,7 @@ authconfig --test | grep hashing
 
 ### /etc/group的文件结构
 
-![image-20200924001412537](C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20200924001412537.png)
+![image-20200924001412537](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/image-20200924001412537.png)
 
 用 ： 号隔开
 
@@ -74,4 +74,74 @@ authconfig --test | grep hashing
 
 groups命令查看所有支持的用户组，第一个显示的为有效用户组
 
-![image-20200924002407129](C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20200924002407129.png)
+![image-20200924204327131](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/20200924204711.png)
+
+newgrp wheel  用来切换有效用户组，记得用exit退出
+
+![image-20200924163018593](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/20200924204716.jpg)
+
+### /etc/gshadow的文件结构
+
+![image-20200924164426835](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/image-20200924164426835.png)
+
+用 ：号隔开
+
++ 组名
++ 密码栏  ！开头表示无合法的密码
++ 用户组管理员的账号
++ 有加入该用户组支持的所属账号
+
+# 账号管理
+
+## 新增用户
+
+adduser
+
+![image-20200924165425829](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/image-20200924165425829.png)
+
+useradd
+
+![image-20200924171355123](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/image-20200924171355123.png)
+
+useradd的默认值可以用useradd -D 查看
+
+/etc/skel是用户家目录参考基准目录
+
+UID/GID的密码参数参考：/etc/login.defs
+
+## 用户删除和密码设置
+
+账户刚刚创建后默认是锁定的，不能登录，需要设置密码
+
+passwd  [user]
+
+![image-20200924192613665](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/image-20200924192613665.png)
+
+若直接输入passwd会修改当前用户的密码
+
+现在的Linux会使用PAM模块检查密码，在/etc/pam.d/passwd中
+
+历史命令在/root/.bash_history里
+
+使用管道输入修改密码
+
+```shell
+echo "abc543cc" | passwd --stdin user
+```
+
+不用重复输入，创建大量用户时使用
+
+passwd -S 查看密码参数
+
+锁定用户
+
+```shell
+passwd -l user
+```
+
+解锁用户
+
+```shell
+passwd -u user
+```
+
