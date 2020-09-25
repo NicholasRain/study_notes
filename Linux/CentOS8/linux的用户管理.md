@@ -145,3 +145,94 @@ passwd -l user
 passwd -u user
 ```
 
+用chage详细显示密码参数
+
+![image-20200925093355637](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/20200925093357.png)
+
+如果想让用户登陆后强制更改密码
+
+```shell
+chage -d 0 user
+```
+
+## 修改用户
+
+usermod  [-cdegGlsuLU]  username
+
+![image-20200925095505281](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/20200925095506.png)
+
+删除用户
+
+userdel  -r user
+
+-r：连同家目录一起删除
+
+## ACL（access control list）主机详细权限规划
+
+查看是否启动了ACL
+
+```shell
+dmesg | grep -i acl
+```
+
+getfacl 和setfacl
+
+为用户nicholas 添加文件file1的rx权限
+
+```shell
+setfacl -m u:nicholas:rx file1
+```
+
+查看file1的acl参数
+
+```shell
+getfacl file1
+```
+
+d:u:username:rwx  子文件默认继承
+
+g:groupname:rwx  设置用户组
+
+全部取消ACL 使用 -b  ； 单一的取消使用 -x
+
+```shell
+setfavl -x u:nicholas /file1
+```
+
+ acl设置时权限项不能留空白，用  -   代替没有权限
+
+# 用户切换
+
+## su
+
+su  [-lm] [-c命令] [username]
+
++ \-  表示使用login-shell的变量文件的读取方式登录
++ -l   login-shell方式，后面需要加使用者账号
++ -m 表示使用当前的配置文件
++ -c 只使用一次命令，后面加一条命令
+
+切换用户时最好用 su **-**
+
+ 使用root身份执行一条命令
+
+```shell
+su - -c "head -n 3 /etc/shadow"
+```
+
+## sudo
+
+只有在/etc/sudoers里的才能使用sudo命令
+
+sudo [-b] [-u a new username]
+
++ -b  将后续的命令放到后台让系统执行，不与当前的shell产生影响
++ -m 要切换的用户
+
+使用visudo编辑/etc/sudoers
+
+%groupname  表示用户组
+
+![image-20200925131934262](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/20200925132257.jpg)
+
+The first `ALL` means that `root` is able to use `sudo` from any Terminal. The second `ALL` means that `root` can use `sudo` to impersonate any other user. The third `ALL` means that `root` can impersonate any other group. Finally, the last `ALL` refers to what commands this user is able to do; in this case, any command he or she wishes.
