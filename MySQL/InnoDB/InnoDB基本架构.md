@@ -32,4 +32,34 @@ InnoDB是多线程的存储引擎，有过个线程在后台工作
     可以用`SHOW ENGINE INNODB STATUS\G;` 来观察InnoDB的IO Thread：
 
    ![image-20200926175649816](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/20200926175654.png)
+   
+3.   Purge Thread
+
+    回收事务已经提交不需要的undo页。从InnoDB 1.2版本开始，InnoDB支持多个Purge Thread，这样做的目的是为了进一步加快undo页的回收。同时由于Purge Thread需要 离散地读取undo页，这样也能更进一步利用磁盘的随机读取性能。如用户可以设置4个Purge Thread：
+
+![image-20200927175339348](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/20200927175343.png)
+
+4.  Page Clearner Thread
+
+   将脏页的刷新操作放到单独的线程进行操作，提高存储引擎的性能。
+
+## 内存
+
+1.  缓冲池
+
+   InnoDB存储引擎是基于磁盘存储的，并将记录按**页**的方式管理。因此CPU和磁盘之间的速度鸿沟需要缓冲池来提高数据库的性能。缓冲池实际是内存的一块区域。对于读操作，采用CPU\==》内存==》磁盘的读取方式。写操作时，先修改缓存中的页，然后以一定的速度刷新回磁盘，并不是每次修改就直接写回磁盘，通过checkpoint机制。
+
+   ![image-20200927181239656](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/20200927181241.png)
+
+   使用set global innodb_buffer_pool_size = 2097152; 进行修改。
+
+   调优参数：
+
+   val = Innodb_buffer_pool_pages_data / Innodb_buffer_pool_pages_total * 100%
+   val > 95% 则考虑增大 innodb_buffer_pool_size， 建议使用物理内存的75%
+   val < 95% 则考虑减小 innodb_buffer_pool_size， 建议设置为：Innodb_buffer_pool_pages_data\*Innodb_page_size\*1.05/(1024\*1024*1024)      参考文章：https://www.cnblogs.com/wanbin/p/9530833.html
+
+   
+
+   
 
