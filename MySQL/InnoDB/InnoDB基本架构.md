@@ -93,6 +93,6 @@ SELECT POOL_ID,POOL_SIZE,FREE_BUFFERS,DATABASE_PAGES  FROM INNODB_BUFFER_POOL_ST
 
    一般采用LRU（最近最少使用）算法来管理缓冲池中的页，频繁使用的放在前端，使用少的放在后端，当新的页缓冲池放不下时将释放LRU尾端的页。
 
-   ![image-20200928185132031](C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20200928185132031.png)
+   ![image-20200928185132031](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/20200928210816.png)
 
    使用优化的LRU算法。默认是距离尾端37%（约3/8）位置处，叫midpoint，midpoint前的叫new列表，之后的叫old列表。

@@ -12,17 +12,17 @@
 
 OSI模型分两个部分，一共7层，上三层应用层、表示层、会话层，下四层传输层、网络层、数据链路层、物理层。上三层指定了应用之间的通信和用户交流；下四层指定了端到端的数据传输。
 
-<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20200928203746255.png" alt="image-20200928203746255" style="zoom: 67%;" />
+<img src="https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/20200928210833.png" alt="image-20200928203746255" style="zoom: 67%;" />
 
 ​                                                     图：上三层
 
-<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20200928203709998.png" alt="image-20200928203709998" style="zoom: 67%;" />
+<img src="https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/20200928210842.png" alt="image-20200928203709998" style="zoom: 67%;" />
 
 ​													图：下四层
 
 NMS（网络工作站）、web和应用程序服务器、网络主机、网关（非默认网关）运行在全部7层上
 
-![image-20200928204714270](C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20200928204714270.png)
+![image-20200928204714270](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/20200928210855.png)
 
 ​													图：各层的功能
 
