@@ -1,4 +1,4 @@
-# 系统服务
+# systemd系统服务
 
 > service :  常驻内存中的进程并且可以提供一些系统和网络功能
 >
@@ -93,3 +93,10 @@ systemctl list-dependencies [unit] [--reverse]
 
 使用cat /etc/services | grep 查看服务和端口号
 
+## 网络服务
+
+查看启用端口  netstat -tlunp
+
+关闭网络服务
+
+![image-20200928110034553](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/20200928110036.png)

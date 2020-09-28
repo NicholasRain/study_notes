@@ -45,7 +45,7 @@ InnoDB是多线程的存储引擎，有过个线程在后台工作
 
 ## 内存
 
-1.  缓冲池
+1. 缓冲池
 
    InnoDB存储引擎是基于磁盘存储的，并将记录按**页**的方式管理。因此CPU和磁盘之间的速度鸿沟需要缓冲池来提高数据库的性能。缓冲池实际是内存的一块区域。对于读操作，采用CPU\==》内存==》磁盘的读取方式。写操作时，先修改缓存中的页，然后以一定的速度刷新回磁盘，并不是每次修改就直接写回磁盘，通过checkpoint机制。
 
@@ -57,9 +57,42 @@ InnoDB是多线程的存储引擎，有过个线程在后台工作
 
    val = Innodb_buffer_pool_pages_data / Innodb_buffer_pool_pages_total * 100%
    val > 95% 则考虑增大 innodb_buffer_pool_size， 建议使用物理内存的75%
-   val < 95% 则考虑减小 innodb_buffer_pool_size， 建议设置为：Innodb_buffer_pool_pages_data\*Innodb_page_size\*1.05/(1024\*1024*1024)      参考文章：https://www.cnblogs.com/wanbin/p/9530833.html
+   val < 95% 则考虑减小 innodb_buffer_pool_size， 建议设置为：Innodb_buffer_pool_pages_data\*Innodb_page_size\*1.05/(1024\*1024*1024)      参考文章：https://www.cnblogs.com/wanbin/p/9530833.html                
 
-   
+   缓存的数据页类型:
 
-   
+   + 索引页
+   + 数据页
+   + undo页
+   + 插入缓冲（insert buffer）
+   + 自适应哈希索引 （adaptive hash index）
+   + Innodb存储的锁信息（lock info）
+   + 数据字典信息（data dictionary）
 
+   ![image-20200928164156951](https://cdn.jsdelivr.net/gh/NicholasRain/pictures@master/20200928164158.png)
+
+​                                                 上图：InnoDB内存数据对象
+
+​			通过增加缓冲池实例来减少数据库内部资源的竞争，使用命令
+
+```mysql
+show variables like 'innodb_buffer_pool_instances'\G;
+```
+
+​			显示缓冲池实例信息。使用show engine innodb status\G；显示详细信息。
+
+​			在配置文件中修改缓冲池实例数量。可以通过information_schema架构下的 
+
+表INNODB_BUFFER_POOL_STATS来观察缓冲的状态。
+
+```mysql
+SELECT POOL_ID,POOL_SIZE,FREE_BUFFERS,DATABASE_PAGES  FROM INNODB_BUFFER_POOL_STATS\G;
+```
+
+2. LRU List、Free List和Flush List
+
+   一般采用LRU（最近最少使用）算法来管理缓冲池中的页，频繁使用的放在前端，使用少的放在后端，当新的页缓冲池放不下时将释放LRU尾端的页。
+
+   ![image-20200928185132031](C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20200928185132031.png)
+
+   使用优化的LRU算法。默认是距离尾端37%（约3/8）位置处，叫midpoint，midpoint前的叫new列表，之后的叫old列表。
